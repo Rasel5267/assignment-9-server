@@ -11,8 +11,16 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
     errors = [
       {
         path: '',
-        message,
-      },
+        message
+      }
+    ];
+  } else if (error.code === 'P2002') {
+    message = (error.meta?.cause as string) || 'Email already exists';
+    errors = [
+      {
+        path: '',
+        message
+      }
     ];
   } else if (error.code === 'P2003') {
     if (error.message.includes('delete()` invocation:')) {
@@ -20,8 +28,8 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
       errors = [
         {
           path: '',
-          message,
-        },
+          message
+        }
       ];
     }
   }
@@ -29,7 +37,7 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
   return {
     statusCode,
     message,
-    errorMessages: errors,
+    errorMessages: errors
   };
 };
 

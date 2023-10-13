@@ -1,24 +1,16 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { z } from 'zod';
 
 dotenv.config({ path: path.join(process.cwd(), '.env') });
 
-const envVarsZodSchema = z.object({
-    NODE_ENV: z.string(),
-    PORT: z
-        .string()
-        .default('3030')
-        .refine((val) => Number(val)),
-    JWT_SECRET: z.string()
-});
-
-const envVars = envVarsZodSchema.parse(process.env);
-
 export default {
-    env: envVars.NODE_ENV,
-    port: envVars.PORT,
-    jwt: {
-        secret: envVars.JWT_SECRET
-    }
+  env: process.env.NODE_ENV,
+  port: process.env.PORT,
+  bcrypt_salt: process.env.BCRYPT_SALT,
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expires_in: process.env.JWT_EXPIRES_IN,
+    refresh_secret: process.env.JWT_REFRESH_SECRET,
+    refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN
+  }
 };

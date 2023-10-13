@@ -16,11 +16,11 @@ model User {
     role     String
     password String
 
-    customerEmail String
-    customer      Customer @relation(fields: [customerEmail], references: [email])
+    admin   Admin?  @relation(fields: [adminId], references: [id])
+    adminId String? @unique
 
-    adminEmail String
-    admin      Admin  @relation(fields: [adminEmail], references: [email])
+    customer   Customer? @relation(fields: [customerId], references: [id])
+    customerId String?   @unique
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -31,15 +31,16 @@ model User {
 model Customer {
     id        String @id @default(uuid())
     email     String @unique
-    role      String
-    password  String
     name      String
     contactNo String
     address   String
 
+    user     User?
+    bookings Booking[]
+    reviews  Review[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    users     User[]
 
     @@map("customers")
 }
@@ -47,15 +48,86 @@ model Customer {
 model Admin {
     id        String @id @default(uuid())
     email     String @unique
-    role      String
-    password  String
     name      String
     contactNo String
     address   String
 
+    user User?
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    users     User[]
 
     @@map("admins")
+}
+
+model TourPackage {
+    id          String @id @default(uuid())
+    packageName String
+    description String
+    duration    Int
+    price       Float
+
+    destination   Destination @relation(fields: [destinationId], references: [id])
+    destinationId String
+
+    bookings Booking[]
+    reviews  Review[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("tour-packages")
+}
+
+model Booking {
+    id            String        @id @default(uuid())
+    bookingDate   DateTime
+    paymentStatus String
+    travelDate    DateTime
+    bookingStatus BookingStatus @default(PENDING)
+
+    customer   Customer @relation(fields: [customerId], references: [id])
+    customerId String
+
+    tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id])
+    tourPackageId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("bookings")
+}
+
+model Destination {
+    id              String        @id @default(uuid())
+    destinationName String
+    description     String
+    imageUrl        String
+    tourPackages    TourPackage[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("destinations")
+}
+
+model Review {
+    id            String      @id @default(uuid())
+    rating        Float
+    comment       String
+    customer      Customer    @relation(fields: [customerId], references: [id])
+    customerId    String
+    tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id])
+    tourPackageId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("reviews")
+}
+
+enum BookingStatus {
+    PENDING
+    APPROVED
+    COMPLETED
 }
