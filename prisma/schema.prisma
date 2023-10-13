@@ -61,11 +61,14 @@ model Admin {
 }
 
 model TourPackage {
-    id          String @id @default(uuid())
-    packageName String
-    description String
-    duration    Int
-    price       Float
+    id            String            @id @default(uuid())
+    packageName   String
+    description   String
+    duration      Int
+    price         Float
+    departureDate DateTime
+    returnDate    DateTime
+    status        TourPackageStatus @default(UPCOMING)
 
     destination   Destination @relation(fields: [destinationId], references: [id])
     destinationId String
@@ -124,6 +127,12 @@ model Review {
     updatedAt DateTime @updatedAt
 
     @@map("reviews")
+}
+
+enum TourPackageStatus {
+    UPCOMING
+    ONGOING
+    FINISHED
 }
 
 enum BookingStatus {
