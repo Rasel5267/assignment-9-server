@@ -25,4 +25,6 @@ router.patch(
   DestinationController.UpdateDestination
 );
 
+router.delete('/:id', auth(ENUM_USER_ROLE.ADMIN), DestinationController.DeleteDestination);
+
 export const DestinationRoutes = router;

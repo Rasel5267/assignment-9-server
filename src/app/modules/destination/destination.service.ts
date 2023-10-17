@@ -118,9 +118,23 @@ const UpdateDestination = async (
   return result;
 };
 
+const DeleteDestination = async (id: string): Promise<Destination> => {
+  const result = await prisma.destination.delete({
+    where: {
+      id
+    },
+    include: {
+      tourPackages: true
+    }
+  });
+
+  return result;
+};
+
 export const DestinationService = {
   CreateDestination,
   GetAllDestinations,
   GetDestinationById,
-  UpdateDestination
+  UpdateDestination,
+  DeleteDestination
 };

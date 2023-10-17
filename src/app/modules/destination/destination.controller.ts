@@ -57,9 +57,22 @@ const UpdateDestination = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const DeleteDestination = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await DestinationService.DeleteDestination(id);
+
+  sendResponse<Destination>(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Destination deleted successfully',
+    data: result
+  });
+});
+
 export const DestinationController = {
   CreateDestination,
   GetAllDestinations,
   GetDestinationById,
-  UpdateDestination
+  UpdateDestination,
+  DeleteDestination
 };

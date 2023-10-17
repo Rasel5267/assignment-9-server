@@ -8,6 +8,10 @@ const create = z.object({
     description: z.string({
       required_error: 'Package description must be provided'
     }),
+    activities: z.any({
+      required_error: 'Activities must be provided'
+    }),
+    totalCapacity: z.number({}).optional(),
     duration: z.number({
       required_error: 'Duration must be provided'
     }),
@@ -22,14 +26,24 @@ const create = z.object({
 
 const update = z.object({
   body: z.object({
-    packageName: z.number().optional(),
-    description: z.number().optional(),
+    packageName: z.string().optional(),
+    description: z.string().optional(),
+    totalCapacity: z.number({}).optional(),
     duration: z.number().optional(),
     price: z.number().optional()
   })
 });
 
-export const CustomerValidation = {
+const updateStatus = z.object({
+  body: z.object({
+    status: z.string({
+      required_error: 'Status must be provided'
+    })
+  })
+});
+
+export const TourPackageValidation = {
   create,
-  update
+  update,
+  updateStatus
 };

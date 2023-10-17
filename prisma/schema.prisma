@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -35,9 +36,9 @@ model Customer {
     contactNo String
     address   String
 
-    user     User?
-    bookings Booking[]
-    reviews  Review[]
+    user    User?
+    orders  Order[]
+    reviews Review[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -61,9 +62,15 @@ model Admin {
 }
 
 model TourPackage {
-    id            String            @id @default(uuid())
-    packageName   String
-    description   String
+    id          String   @id @default(uuid())
+    packageName String
+    description String
+    activities  String[]
+
+    totalCapacity  Int @default(0)
+    bookedSpots    Int @default(0)
+    availableSpots Int @default(0)
+
     duration      Int
     price         Float
     departureDate DateTime
@@ -73,8 +80,8 @@ model TourPackage {
     destination   Destination @relation(fields: [destinationId], references: [id])
     destinationId String
 
-    bookings Booking[]
-    reviews  Review[]
+    orders  Order[]
+    reviews Review[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -82,15 +89,15 @@ model TourPackage {
     @@map("tour-packages")
 }
 
-model Booking {
-    id            String        @id @default(uuid())
-    bookingDate   DateTime
-    paymentStatus String
-    travelDate    DateTime
-    bookingStatus BookingStatus @default(PENDING)
+model Order {
+    id          String      @id @default(uuid())
+    quantity    Int         @default(1)
+    price       Float
+    travelDate  DateTime
+    orderStatus OrderStatus @default(PENDING)
 
-    customer   Customer @relation(fields: [customerId], references: [id])
-    customerId String
+    customer      Customer @relation(fields: [customerEmail], references: [email])
+    customerEmail String
 
     tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id])
     tourPackageId String
@@ -98,7 +105,7 @@ model Booking {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@map("bookings")
+    @@map("orders")
 }
 
 model Destination {
@@ -118,8 +125,8 @@ model Review {
     id            String      @id @default(uuid())
     rating        Float
     comment       String
-    customer      Customer    @relation(fields: [customerId], references: [id])
-    customerId    String
+    customer      Customer    @relation(fields: [customerEmail], references: [email])
+    customerEmail String
     tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id])
     tourPackageId String
 
@@ -129,13 +136,36 @@ model Review {
     @@map("reviews")
 }
 
+model Blog {
+    id          String @id @default(uuid())
+    title       String
+    description String
+    image       String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("blogs")
+}
+
+model Faq {
+    id       String @id @default(uuid())
+    question String
+    answer   String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("faqs")
+}
+
 enum TourPackageStatus {
     UPCOMING
     ONGOING
     FINISHED
 }
 
-enum BookingStatus {
+enum OrderStatus {
     PENDING
     APPROVED
     COMPLETED
