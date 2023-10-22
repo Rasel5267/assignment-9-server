@@ -4,6 +4,19 @@ import { UserService } from './user.service';
 import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
 import { Admin, User } from '@prisma/client';
+import { JwtPayload } from 'jsonwebtoken';
+
+const Profile = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user as JwtPayload;
+  const result = await UserService.Profile(user);
+
+  sendResponse<User>(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result
+  });
+});
 
 const CreateCustomer = catchAsync(async (req: Request, res: Response) => {
   const { customer, ...userData } = req.body;
@@ -30,6 +43,7 @@ const CreateAdmin = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const UserController = {
+  Profile,
   CreateCustomer,
   CreateAdmin
 };

@@ -7,6 +7,12 @@ import { ENUM_USER_ROLE } from '../../../enums/user';
 
 const router = express.Router();
 
+router.get(
+  '/profile',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.CUSTOMER),
+  UserController.Profile
+);
+
 router.post(
   '/create-customer',
   validateRequest(UserValidation.createCustomerZodSchema),

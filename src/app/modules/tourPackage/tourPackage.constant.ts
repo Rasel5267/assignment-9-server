@@ -6,12 +6,7 @@ export const tourPackageFilterableFields: string[] = [
   'destinationId'
 ];
 
-export const tourPackageSearchableFields: string[] = [
-  'packageName',
-  'duration',
-  'description',
-  'price'
-];
+export const tourPackageSearchableFields: string[] = ['packageName', 'description'];
 
 export const tourPackageRelationalFields: string[] = ['destinationId'];
 export const tourPackageRelationalFieldsMapper: { [key: string]: string } = {

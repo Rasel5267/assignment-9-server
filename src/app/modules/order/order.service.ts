@@ -22,7 +22,7 @@ const CreateOrder = async (user: JwtPayload, payload: Order): Promise<Order> => 
     }
   });
   let result = null;
-  if (isOrderExist) {
+  if (isOrderExist !== null) {
     result = await prisma.order.update({
       where: {
         id: isOrderExist.id
@@ -34,7 +34,7 @@ const CreateOrder = async (user: JwtPayload, payload: Order): Promise<Order> => 
   } else {
     const findPackage = await prisma.tourPackage.findUnique({
       where: {
-        id: payload.id
+        id: payload.tourPackageId
       }
     });
 
@@ -144,13 +144,13 @@ const GetOrderById = async (user: JwtPayload, id: string): Promise<Order | null>
   return result;
 };
 
-const UpdateOrderStatus = async (id: string, payload: OrderStatus): Promise<Order> => {
+const UpdateOrderStatus = async (id: string, orderStatus: OrderStatus): Promise<Order> => {
   const result = await prisma.order.update({
     where: {
       id
     },
     data: {
-      orderStatus: payload
+      orderStatus: orderStatus
     }
   });
 

@@ -4,6 +4,21 @@ import { ApiError } from '../../../errors/ApiError';
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import config from '../../../config';
+import { JwtPayload } from 'jsonwebtoken';
+
+const Profile = async (user: JwtPayload): Promise<User | null> => {
+  const result = await prisma.user.findUnique({
+    where: {
+      email: user.email
+    },
+    include: {
+      customer: true,
+      admin: true
+    }
+  });
+
+  return result;
+};
 
 const CreateCustomer = async (customer: Customer, user: User): Promise<User | null> => {
   user.role = 'customer';
@@ -98,6 +113,7 @@ const CreateAdmin = async (admin: Admin, user: User): Promise<Admin | null> => {
 };
 
 export const UserService = {
+  Profile,
   CreateCustomer,
   CreateAdmin
 };

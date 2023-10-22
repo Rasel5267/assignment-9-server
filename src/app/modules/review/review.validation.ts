@@ -2,7 +2,7 @@ import z from 'zod';
 
 const create = z.object({
   body: z.object({
-    rating: z.string({
+    rating: z.number({
       required_error: 'Rating must be provided'
     }),
     comment: z.string({
@@ -16,7 +16,7 @@ const create = z.object({
 
 const update = z.object({
   body: z.object({
-    rating: z.string().optional(),
+    rating: z.number().optional(),
     comment: z.string().optional(),
     tourPackageId: z.string().optional()
   })

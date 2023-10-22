@@ -53,7 +53,7 @@ const GetOrderById = catchAsync(async (req: Request, res: Response) => {
 
 const UpdateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await OrderService.UpdateOrderStatus(id, req.body);
+  const result = await OrderService.UpdateOrderStatus(id, req.body.orderStatus);
 
   sendResponse<Order>(res, {
     statusCode: httpStatus.OK,

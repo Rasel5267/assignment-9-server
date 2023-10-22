@@ -36,8 +36,8 @@ const GetAdminById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const UpdateAdmin = catchAsync(async (req: Request, res: Response) => {
-  const user = req.user as JwtPayload;
-  const result = await AdminService.UpdateAdmin(user, req.body);
+  const id = req.params.id;
+  const result = await AdminService.UpdateAdmin(id, req.body);
 
   sendResponse<Admin>(res, {
     statusCode: httpStatus.CREATED,

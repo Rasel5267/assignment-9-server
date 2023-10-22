@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+    provider  = "postgresql"
+    url       = env("POSTGRES_PRISMA_URL")
+    directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -71,7 +71,7 @@ model TourPackage {
     bookedSpots    Int @default(0)
     availableSpots Int @default(0)
 
-    duration      Int
+    duration      String
     price         Float
     departureDate DateTime
     returnDate    DateTime
@@ -112,7 +112,6 @@ model Destination {
     id              String        @id @default(uuid())
     destinationName String
     description     String
-    imageUrl        String
     tourPackages    TourPackage[]
 
     createdAt DateTime @default(now())
@@ -140,7 +139,6 @@ model Blog {
     id          String @id @default(uuid())
     title       String
     description String
-    image       String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

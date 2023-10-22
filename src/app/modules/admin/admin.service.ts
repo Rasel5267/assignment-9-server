@@ -87,14 +87,10 @@ const GetAdminById = async (id: string): Promise<Admin> => {
   return result;
 };
 
-const UpdateAdmin = async (user: JwtPayload | null, payload: Partial<Admin>): Promise<Admin> => {
-  if (!user) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You are not authorized');
-  }
-
+const UpdateAdmin = async (id: string, payload: Partial<Admin>): Promise<Admin> => {
   const isExist = await prisma.admin.findUnique({
     where: {
-      email: user.email
+      id
     }
   });
 
@@ -104,7 +100,7 @@ const UpdateAdmin = async (user: JwtPayload | null, payload: Partial<Admin>): Pr
 
   const result = await prisma.admin.update({
     where: {
-      email: user.email
+      id
     },
     data: payload
   });

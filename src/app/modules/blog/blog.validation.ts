@@ -7,9 +7,6 @@ const create = z.object({
     }),
     description: z.string({
       required_error: 'Description must be provided'
-    }),
-    image: z.string({
-      required_error: 'Image must be provided'
     })
   })
 });
@@ -17,8 +14,7 @@ const create = z.object({
 const update = z.object({
   body: z.object({
     title: z.string().optional(),
-    description: z.string().optional(),
-    image: z.string().optional()
+    description: z.string().optional()
   })
 });
 

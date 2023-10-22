@@ -12,7 +12,7 @@ const create = z.object({
       required_error: 'Activities must be provided'
     }),
     totalCapacity: z.number({}).optional(),
-    duration: z.number({
+    duration: z.string({
       required_error: 'Duration must be provided'
     }),
     price: z.number({
@@ -29,7 +29,7 @@ const update = z.object({
     packageName: z.string().optional(),
     description: z.string().optional(),
     totalCapacity: z.number({}).optional(),
-    duration: z.number().optional(),
+    duration: z.string().optional(),
     price: z.number().optional()
   })
 });

@@ -7,11 +7,7 @@ import { AdminValidation } from './admin.validation';
 
 const router = express.Router();
 
-router.get(
-  '/',
-  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  AdminController.GetAllAdmins
-);
+router.get('/', auth(ENUM_USER_ROLE.SUPER_ADMIN), AdminController.GetAllAdmins);
 
 router.get(
   '/:id',
@@ -20,7 +16,7 @@ router.get(
 );
 
 router.patch(
-  '/',
+  '/:id',
   validateRequest(AdminValidation.update),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   AdminController.UpdateAdmin

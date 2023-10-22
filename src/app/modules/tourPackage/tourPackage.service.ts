@@ -1,4 +1,4 @@
-import { OrderStatus, Prisma, TourPackage } from '@prisma/client';
+import { Prisma, TourPackage } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import { ITourPackageFilterRequest } from './tourPackage.interface';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -63,7 +63,8 @@ const GetAllTourPackages = async (
 
   const result = await prisma.tourPackage.findMany({
     include: {
-      destination: true
+      destination: true,
+      reviews: true
     },
     where: whereConditions,
     skip,
@@ -95,7 +96,12 @@ const GetTourPackageById = async (id: string): Promise<TourPackage | null> => {
       id
     },
     include: {
-      destination: true
+      destination: true,
+      reviews: {
+        include: {
+          customer: true
+        }
+      }
     }
   });
 
